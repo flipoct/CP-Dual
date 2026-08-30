@@ -1,0 +1,12 @@
+# Development snapshots kept locally, not part of the source tree
+*.tar.gz
+
+# Dependencies and build output (see vercel-app/.gitignore for the app itself)
+node_modules/
+.next/
+.vercel/
+
+# Local environment
+.env
+.env.*
+!.env.example

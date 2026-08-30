@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+:root { --background: #0b1020; --foreground: #ffffff; }
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection { background: #c8ff46; color: #0b1020; }
+
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button, a { cursor: pointer; }
+.rating-range { appearance: none; height: 6px; border-radius: 999px; background: linear-gradient(90deg, #c8ff46, #4f8cff 55%, #ff5667); }
+.rating-range::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 5px solid #c8ff46; box-shadow: 0 0 0 4px rgba(200,255,70,.12); }
+.rating-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 4px solid #c8ff46; box-shadow: 0 0 0 4px rgba(200,255,70,.12); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
