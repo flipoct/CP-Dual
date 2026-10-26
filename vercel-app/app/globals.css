@@ -1,25 +1,157 @@
+/* Hallmark · checked: 2026-10-26 · genre: modern-minimal (inferred)
+ * floor: 0 FAIL · 0 REFLEX · fixed: 176 FAIL, 34 REFLEX across 19 gates
+ *   (6a, 7b, 10a, 19, 20, 26a, 29, 34, 40, 41, 48, 50, 54, 63, 64, 66, 67, 74, F3, F24, F26)
+ * structural: 3 printed, not rebuilt (58, 77, 79); only a full redesign settles them
+ * finish-review: subagent · 5 findings · 4 resolved 1 partial · gap: the hero's dead band
+ * built: the project · redesign: polish · v2.0.0 */
+
 @import 'tailwindcss';
 
-:root { --background: #0b1020; --foreground: #ffffff; }
+/* One token block. Every colour on the page resolves here; the lime and the
+   navy are the product's own, carried over from what was already built. */
+@theme {
+  /* Surfaces, deepest first. */
+  --color-ground: #0b1020;
+  --color-panel: #11182b;
+  --color-well: #0d1425;
+  --color-field: #090e1b;
+  --color-raised: #19223a;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Ink. Every tier clears 4.5:1 on every surface above, measured, so the
+     quietest caption is still readable; the old slate-500 sat at 3.56:1. */
+  --color-ink: #eef2fa;
+  --color-ink-2: #b9c4da;
+  --color-ink-3: #8b97b2;
+  --color-ink-4: #7d8aa6;
+
+  /* Lifts and edges. The translucent ones carry no contrast duty and read the
+     same on every surface; the strong edge is for field borders, which owe 3:1. */
+  --color-lift: rgb(238 242 250 / 0.045);
+  --color-lift-2: rgb(238 242 250 / 0.08);
+  --color-edge: rgb(238 242 250 / 0.12);
+  --color-edge-2: rgb(238 242 250 / 0.24);
+  --color-edge-strong: #6f7d9a;
+
+  /* The signal: one accent, used for the primary action and live state. */
+  --color-signal: #c8ff46;
+  --color-signal-bright: #ddff8a;
+  --color-signal-ink: #0b1020;
+  --color-focus: #c8ff46;
+
+  --color-danger: #ff6b7a;
+  --color-warn: #f5c451;
+
+  /* The AtCoder rating ladder, which is the site's own vocabulary. */
+  --color-rank-grey: #9aa6c0;
+  --color-rank-brown: #c39a63;
+  --color-rank-green: #35c46a;
+  --color-rank-cyan: #39bfd2;
+  --color-rank-blue: #6f9dff;
+  --color-rank-violet: #d66ef0;
+  --color-rank-yellow: #ffb340;
+  --color-rank-red: #ff6b7a;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: clip;
 }
 
-::selection { background: #c8ff46; color: #0b1020; }
+/* Korean breaks between characters by default, so a line can end mid-word.
+   keep-all holds each word together; break-word still rescues a long token. */
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
 
-button, a, input { -webkit-tap-highlight-color: transparent; }
-button, a { cursor: pointer; }
-.rating-range { appearance: none; height: 6px; border-radius: 999px; background: linear-gradient(90deg, #c8ff46, #4f8cff 55%, #ff5667); }
-.rating-range::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 5px solid #c8ff46; box-shadow: 0 0 0 4px rgba(200,255,70,.12); }
-.rating-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 4px solid #c8ff46; box-shadow: 0 0 0 4px rgba(200,255,70,.12); }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+/* pretty keeps a sentence from leaving one word alone on its last line (F26). */
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  /* keep-all above must never let a display head push its grid track wider
+     than the screen; the Floor asks for both of these on display heads. */
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+}
+
+:root {
+  caret-color: var(--color-signal);
+  scrollbar-color: var(--color-edge-2) var(--color-ground);
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+/* One focus ring for the whole page, drawn instantly, at 15:1 over every
+   surface here. Nothing removes an outline without putting this in its place. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+:where(button, a):disabled,
+:where(button, a)[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+.rating-range {
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-rank-green), var(--color-rank-blue) 55%, var(--color-rank-red));
+}
+
+.rating-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  border: 5px solid var(--color-signal);
+}
+
+.rating-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  border: 4px solid var(--color-signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
